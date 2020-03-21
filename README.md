@@ -8,7 +8,7 @@ The vagrant file will do the following:
 4.  Install k8s control plane
 5.  Initialize cluster with Flannel CIDR block & install Flannel
 6.  Join the nodes to the master
-7.  Create and copy the SSH key to all machines so you can SSH to any node from the Master.  Add names & IPs to the local hosts file on each master and node  
+7.  Create and copy the SSH key to all machines so you can SSH to any node from the Master.  Add names & IPs to the local hosts file on each master and node.  Create alias in vagrant home for kubectl...just use k
 8.  Make required Ubuntu OS mods for the cluster to function properly
 
 ## Dependencies
@@ -62,11 +62,11 @@ Get the status of the Nodes:
 
 ```bash
 $ k get nodes -o wide
-NAME     STATUS     ROLES    AGE     VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
-master   Ready      master   16m     v1.17.4   10.0.0.10     <none>        Ubuntu 18.04.4 LTS   4.15.0-88-generic   docker://19.3.6
-node1    Ready      <none>   11m     v1.17.4   10.0.0.11     <none>        Ubuntu 18.04.4 LTS   4.15.0-88-generic   docker://19.3.6
-node2    Ready      <none>   6m19s   v1.17.4   10.0.0.12     <none>        Ubuntu 18.04.4 LTS   4.15.0-88-generic   docker://19.3.6
-node3    NotReady   <none>   90s     v1.17.4   10.0.0.13     <none>        Ubuntu 18.04.4 LTS   4.15.0-88-generic   docker://19.3.6
+NAME     STATUS   ROLES    AGE     VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
+master   Ready    master   16m     v1.17.4   10.0.0.10     <none>        Ubuntu 18.04.4 LTS   4.15.0-88-generic   docker://19.3.6
+node1    Ready    <none>   11m     v1.17.4   10.0.0.11     <none>        Ubuntu 18.04.4 LTS   4.15.0-88-generic   docker://19.3.6
+node2    Ready    <none>   6m31s   v1.17.4   10.0.0.12     <none>        Ubuntu 18.04.4 LTS   4.15.0-88-generic   docker://19.3.6
+node3    Ready    <none>   102s    v1.17.4   10.0.0.13     <none>        Ubuntu 18.04.4 LTS   4.15.0-88-generic   docker://19.3.6
 ```
 
 SSH to other Nodes in the cluster from the Master:
