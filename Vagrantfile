@@ -88,10 +88,13 @@ cat /home/vagrant/.ssh/id_rsa.pub > ${KEY_FILE}
 sudo kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=10.244.0.0/16 | grep -Ei "kubeadm join|discovery-token-ca-cert-hash" > ${OUTPUT_FILE}
 chmod +x $OUTPUT_FILE
 
-# Configure kubectl
+# Configure kubectl for vagrant and root users
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
+sudo mkdir -p /root/.kube
+sudo cp -i /etc/kubernetes/admin.conf /root/.kube/config
+sudo chown -R root:root /root/.kube
 
 # Fix kubelet IP
 echo 'Environment="KUBELET_EXTRA_ARGS=--node-ip=10.0.0.10"' | sudo tee -a /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
@@ -101,8 +104,9 @@ curl -o kube-flannel.yml https://raw.githubusercontent.com/coreos/flannel/2140ac
 sed -i.bak 's|"/opt/bin/flanneld",|"/opt/bin/flanneld", "--iface=enp0s8",|' kube-flannel.yml
 kubectl create -f kube-flannel.yml
 
-# Set alias on master
+# Set alias on master for vagrant and root users
 echo "alias k=/usr/bin/kubectl" >> $HOME/.bash_profile
+sudo echo "alias k=/usr/bin/kubectl" >> /root/.bash_profile
 
 # Install the etcd client
 sudo apt install etcd-client
