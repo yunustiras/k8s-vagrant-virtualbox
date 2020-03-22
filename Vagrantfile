@@ -101,7 +101,11 @@ curl -o kube-flannel.yml https://raw.githubusercontent.com/coreos/flannel/2140ac
 sed -i.bak 's|"/opt/bin/flanneld",|"/opt/bin/flanneld", "--iface=enp0s8",|' kube-flannel.yml
 kubectl create -f kube-flannel.yml
 
+# Set alias on master
 echo "alias k=/usr/bin/kubectl" >> $HOME/.bash_profile
+
+# Install the etcd client
+sudo apt install etcd-client
 
 sudo systemctl daemon-reload
 sudo systemctl restart kubelet
