@@ -47,6 +47,14 @@ net/bridge/bridge-nf-call-iptables = 1
 net/bridge/bridge-nf-call-arptables = 1
 EOF
 
+set -e
+IFNAME=$1
+ADDRESS="$(ip -4 addr show $IFNAME | grep "inet" | head -1 |awk '{print $2}' | cut -d/ -f1)"
+sed -e "s/^.*${HOSTNAME}.*/${ADDRESS} ${HOSTNAME} ${HOSTNAME}.local/" -i /etc/hosts
+
+# remove ubuntu-bionic entry
+sed -e '/^.*ubuntu-bionic.*/d' -i /etc/hosts
+
 # Patch OS
 apt-get update && apt-get upgrade -y
 
@@ -71,6 +79,11 @@ deb http://apt.kubernetes.io/ kubernetes-xenial main
 EOF
 apt-get -qq update
 apt-get -qq install -y kubelet kubeadm kubectl
+apt-mark hold kubelet kubectl kubeadm
+
+# Set external DNS
+sed -i -e 's/#DNS=/DNS=8.8.8.8/' /etc/systemd/resolved.conf
+service systemd-resolved restart
 SCRIPT
 
 $provision_master_node = <<-SHELL
@@ -99,10 +112,8 @@ sudo chown -R root:root /root/.kube
 # Fix kubelet IP
 echo 'Environment="KUBELET_EXTRA_ARGS=--node-ip=10.0.0.10"' | sudo tee -a /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 
-# Configure flannel
-curl -o kube-flannel.yml https://raw.githubusercontent.com/coreos/flannel/2140ac876ef134e0ed5af15c65e414cf26827915/Documentation/kube-flannel.yml
-sed -i.bak 's|"/opt/bin/flanneld",|"/opt/bin/flanneld", "--iface=enp0s8",|' kube-flannel.yml
-kubectl create -f kube-flannel.yml
+# Use our flannel config file so that routing will work properly
+kubectl create -f /vagrant/kube-flannel.yml
 
 # Set alias on master for vagrant and root users
 echo "alias k=/usr/bin/kubectl" >> $HOME/.bash_profile
