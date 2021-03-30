@@ -27,7 +27,7 @@ Instal [git](https://git-scm.com/downloads) if you don't already have it.
 ## Open a shell and clone
 
 ```bash
-$ git clone git@github.com:LocusInnovations/k8s-vagrant-virtualbox.git
+$ git clone https://github.com/LocusInnovations/k8s-vagrant-virtualbox
 $ cd k8s-vagrant-virtualbox
 ```
 
