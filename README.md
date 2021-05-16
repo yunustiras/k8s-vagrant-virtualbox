@@ -49,24 +49,21 @@ $ vagrant destroy -f
 
 ## SSH and other Commands
 
-SSH to Master and other Nodes:
+SSH to Master and Node:
 
 ```bash
 $ vagrant ssh master
-$ vagrant ssh node1
+$ vagrant ssh node
 ```
 
 Get the status of the Nodes:
+- 1 Master 1 Node
 
 ```bash
 $ k get nodes -o wide
 NAME     STATUS   ROLES    AGE     VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
 master   Ready    master   16m     v1.17.4   10.0.0.10     <none>        Ubuntu 18.04.4 LTS   4.15.0-88-generic   docker://19.3.6
-node1    Ready    <none>   11m     v1.17.4   10.0.0.11     <none>        Ubuntu 18.04.4 LTS   4.15.0-88-generic   docker://19.3.6
+node     Ready    <none>   11m     v1.17.4   10.0.0.11     <none>        Ubuntu 18.04.4 LTS   4.15.0-88-generic   docker://19.3.6
 ```
 
-SSH to other Nodes in the cluster from the Master:
-
-```bash
-$ ssh node1
 ```
