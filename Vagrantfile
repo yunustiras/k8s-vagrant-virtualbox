@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
     master.vm.provision :shell, privileged: false, inline: $provision_master_node
   end
 
-  %w{node1 node2 node3}.each_with_index do |name, i|
+  %w{node1}.each_with_index do |name, i|
     config.vm.define name do |node|
       node.vm.provider "virtualbox" do |vb|
         vb.name = "node#{i + 1}"
@@ -61,8 +61,6 @@ apt-get update && apt-get upgrade -y
 # Create local host entries
 echo "10.0.0.10 master" >> /etc/hosts
 echo "10.0.0.11 node1" >> /etc/hosts
-echo "10.0.0.12 node2" >> /etc/hosts
-echo "10.0.0.13 node3" >> /etc/hosts
 
 # disable swap
 swapoff -a
