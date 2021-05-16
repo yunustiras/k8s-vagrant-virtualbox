@@ -14,26 +14,25 @@ Vagrant.configure("2") do |config|
     master.vm.provision :shell, privileged: false, inline: $provision_master_node
   end
 
-  %w{node1}.each_with_index do |name, i|
-    config.vm.define name do |node|
-      node.vm.provider "virtualbox" do |vb|
-        vb.name = "node#{i + 1}"
-        vb.memory = 2048
-        vb.cpus = 2
-      end
-      node.vm.box = "ubuntu/bionic64"
-      node.disksize.size = "25GB"
-      node.vm.hostname = name
-      node.vm.network :private_network, ip: "10.0.0.#{i + 11}"
-      node.vm.provision :shell, privileged: false, inline: <<-SHELL
+  config.vm.define :node do |node|
+    node.vm.provider "virtualbox" do |vb|
+      vb.name = "node"
+      vb.memory = 1024
+      vb.cpus = 1
+    end
+    node.vm.box = "ubuntu/bionic64"
+    node.disksize.size = "25GB"
+    node.vm.hostname = "node"
+    node.vm.network :private_network, ip: "10.0.0.11"
+    node.vm.provision :shell, privileged: false, inline: <<-SHELL
 sudo /vagrant/join.sh
-echo 'Environment="KUBELET_EXTRA_ARGS=--node-ip=10.0.0.#{i + 11}"' | sudo tee -a /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+echo 'Environment="KUBELET_EXTRA_ARGS=--node-ip=10.0.0.11"' | sudo tee -a /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 cat /vagrant/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys
 sudo systemctl daemon-reload
 sudo systemctl restart kubelet
 SHELL
-    end
   end
+
 
   config.vm.provision "shell", inline: $install_multicast
 end
@@ -60,7 +59,7 @@ apt-get update && apt-get upgrade -y
 
 # Create local host entries
 echo "10.0.0.10 master" >> /etc/hosts
-echo "10.0.0.11 node1" >> /etc/hosts
+echo "10.0.0.11 node" >> /etc/hosts
 
 # disable swap
 swapoff -a
