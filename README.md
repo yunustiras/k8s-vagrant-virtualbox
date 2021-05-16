@@ -54,8 +54,6 @@ SSH to Master and other Nodes:
 ```bash
 $ vagrant ssh master
 $ vagrant ssh node1
-$ vagrant ssh node2
-$ vagrant ssh node3
 ```
 
 Get the status of the Nodes:
@@ -65,14 +63,10 @@ $ k get nodes -o wide
 NAME     STATUS   ROLES    AGE     VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
 master   Ready    master   16m     v1.17.4   10.0.0.10     <none>        Ubuntu 18.04.4 LTS   4.15.0-88-generic   docker://19.3.6
 node1    Ready    <none>   11m     v1.17.4   10.0.0.11     <none>        Ubuntu 18.04.4 LTS   4.15.0-88-generic   docker://19.3.6
-node2    Ready    <none>   6m31s   v1.17.4   10.0.0.12     <none>        Ubuntu 18.04.4 LTS   4.15.0-88-generic   docker://19.3.6
-node3    Ready    <none>   102s    v1.17.4   10.0.0.13     <none>        Ubuntu 18.04.4 LTS   4.15.0-88-generic   docker://19.3.6
 ```
 
 SSH to other Nodes in the cluster from the Master:
 
 ```bash
 $ ssh node1
-$ ssh node2
-$ ssh node3
 ```
